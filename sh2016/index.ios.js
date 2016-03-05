@@ -6,47 +6,49 @@
 import React, {
   AppRegistry,
   Component,
+  TabBarIOS,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 
+var Dashboard = require('./views/dashboard.ios');
+var Chat = require('./views/chat.ios');
+
 class sh2016 extends Component {
+  constructor(props) {
+    super(props);
+    // set the initial state of our application
+    this.state = {
+      selectedTab: 'dashboard'
+    }
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+        <TabBarIOS selectedTab={this.state.selectedTab}>
+          <TabBarIOS.Item
+            selected={this.state.selectedTab === 'dashboard'}
+            icon={{uri:'featured'}}
+            onPress={() => {
+              this.setState({
+                selectedTab: 'dashboard'
+              });
+            }}>
+              <Dashboard/>
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+            selected={this.state.selectedTab === 'chat'}
+            icon={{uri:'contacts'}}
+            onPress={() => {
+              this.setState({
+                selectedTab: 'chat'
+              });
+            }}>
+              <Chat/>
+            </TabBarIOS.Item>
+        </TabBarIOS>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('sh2016', () => sh2016);
