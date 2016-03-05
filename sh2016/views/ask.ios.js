@@ -12,18 +12,17 @@ import NavigationBar from 'react-native-navbar';
 
 // the actual render view
 class Chat extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props);
+        this.currentLocationName = props.currentLocationName;
+    }
     render() {
-        const viewTitle = {
-            title: 'Chat'
-        };
         return(
-            <View style={styles.appContainer}>
-                <NavigationBar title={viewTitle} />
-                <View style={styles.container}>
-                    <Text>
-                        Chat view
-                    </Text>
-                </View>
+            <View style={styles.container}>
+                <Text>
+                    {this.currentLocationName}
+                </Text>
             </View>
         );
     }
@@ -31,9 +30,6 @@ class Chat extends Component {
 
 //styles
 var styles = StyleSheet.create({
-    appContainer: {
-        flex: 1
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
