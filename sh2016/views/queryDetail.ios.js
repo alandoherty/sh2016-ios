@@ -29,18 +29,7 @@ class QueryDetail extends Component {
         };
 
         return(
-            <View style={styles.appContainer}>
-                <NavigationBar title={viewTitle}
-                               tintColor={"#e74c3c"}
-                               statusBar={{
-                             hidden: false,
-                             style: "light-content"
-                         }}
-                               rightButton={
-                          <Icon.Button name="face" size={24} backgroundColor="rgba(0,0,0,0)" style={styles.profileButton} onPress={this.showProfile} />
-                         }
-                />
-            </View>
+            <Text>TEST</Text>
         )
     }
 }

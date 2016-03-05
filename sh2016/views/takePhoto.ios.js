@@ -7,33 +7,26 @@ import React, {
     Component
 } from 'react-native';
 
-
-// the actual render view
-class Chat extends Component {
+class AskQuestion extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
-        this.currentLocationName = props.currentLocationName;
     }
     render() {
         return(
             <View style={styles.container}>
-                <Text>
-                    {this.currentLocationName}
-                </Text>
+
             </View>
         );
     }
 }
 
-//styles
 var styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F7F7F7'
+        backgroundColor: '#654321'
     }
 });
 
-module.exports = Chat;
+module.exports = AskQuestion;

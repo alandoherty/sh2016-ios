@@ -21,15 +21,20 @@ import React, {
 import NavigationBar from 'react-native-navbar';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-var RNGeocoder = require('react-native-geocoder');
+import RNGeocoder from 'react-native-geocoder';
 
 // load views
 var Answer = require('../views/answer.ios'),
     QueryDetail = require('../views/queryDetail.ios'),
+    AskQuestion = require('../views/askQuestion.ios'),
+    TakePhoto = require('../views/takePhoto.ios'),
     Ask = require('../views/ask.ios');
 
+// and api
+var api = require('../api');
 
-// sample data
+
+/* sample data
 var SAMPLE_DATA = [
     {
         id: 1,
@@ -82,9 +87,7 @@ var SAMPLE_DATA = [
             "text": "Limbo"
         },
     }
-];
-
-
+]; */
 
 class Main extends Component {
 
@@ -111,6 +114,9 @@ class Main extends Component {
 
     // when we load, get the location
     componentDidMount() {
+        // get a session key and store it
+        api.createSession();
+
         var self = this;
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -128,14 +134,11 @@ class Main extends Component {
                 if (err) {
                     console.log(err);
                 } else {
-                    var lastPosition = JSON.stringify(position);
-
                     self.setState({
-                        lastPosition: lastPosition || "",
+                        lastPosition: position || "",
                         currentLocationName: data[0]["name"] || ""
                     });
 
-                    // now fetch data for this location
                     self.fetchData();
                 }
             });
@@ -152,10 +155,22 @@ class Main extends Component {
 
     // custom functions
     fetchData() {
-        // do fetch() eventually but for now just set the datasource to our sample data
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(SAMPLE_DATA),
-            loaded: true
+        var self = this;
+        console.log("COORDS");
+        console.log(self.state.lastPosition);
+        var params = {
+            lat: self.state.lastPosition.coords.latitude,
+            lon: self.state.lastPosition.coords.longitude
+        };
+
+        api.get("/query/list", params, function(err, responseData) {
+            console.log("In callback hell two");
+            console.log(responseData.queries);
+            self.setState({
+                dataSource: self.state.dataSource.cloneWithRows(responseData.queries),
+                loaded: true
+            });
+            console.log("COMPLETE");
         });
     }
 
@@ -170,21 +185,49 @@ class Main extends Component {
     rowPressed(self, query) {
         console.log("CLICKED");
         console.log(query);
-        alert("CLICKED");
+        this.props.navigator.push({
+            title: "Detail",
+            component: QueryDetail,
+            passProps: {
+                latitude: this.state.lastPosition.coords.latitude,
+                longitude: this.state.lastPosition.coords.longitude
+            }
+        });
+    }
+
+    askQuestion() {
+        console.log("ASKING QUESTION");
+        this.props.navigator.push({
+            title: "Question",
+            component: AskQuestion,
+            passProps: {
+                latitude: this.state.lastPosition.coords.latitude,
+                longitude: this.state.lastPosition.coords.longitude
+            }
+        });
+    }
+
+    takePhoto() {
+        console.log("TAKE ALL THE PHOTOS");
+        this.props.navigator.push({
+            title: "Photo",
+            component: TakePhoto
+        })
     }
 
     renderQuery(query) {
+        var avatarURL = "http://sh2016.ngrok.io/image?name=" + query.user.avatar;
         return(
             <TouchableHighlight onPress={() => this.rowPressed(this, query)}>
                 <View style={styles.container}>
                     <Image
-                        source={{uri: query.user.avatar}}
+                        source={{uri: avatarURL}}
                         style={styles.thumbnail}
                     />
                     <View style={styles.rightContainer}>
                         <Text style={styles.name}>{query.user.firstName.toUpperCase()} {query.user.lastName.toUpperCase()}, {query.time}</Text>
-                        <Text style={styles.title}>{query.title}</Text>
-                        <Text style={styles.locationText}><Icon name="location-on" /><Text style={styles.locationDistance}>0.3mi</Text>, {query.location.text}</Text>
+                        <Text style={styles.title}>{query.content}</Text>
+                        <Text style={styles.locationText}><Icon name="location-on" /><Text style={styles.locationDistance}>0.3mi</Text>, Manchester</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -198,16 +241,6 @@ class Main extends Component {
 
         return (
             <View style={styles.appContainer}>
-                <NavigationBar title={viewTitle}
-                               tintColor={"#e74c3c"}
-                               statusBar={{
-                             hidden: false,
-                             style: "light-content"
-                         }}
-                               rightButton={
-                          <Icon.Button name="face" size={24} backgroundColor="rgba(0,0,0,0)" style={styles.profileButton} onPress={this.showProfile} />
-                         }
-                />
 
                 <ListView
                     dataSource = {this.state.dataSource}
@@ -216,10 +249,10 @@ class Main extends Component {
                 />
 
                 <ActionButton buttonColor="rgba(231,76,60,1)">
-                    <ActionButton.Item buttonColor='#9b59b6' title="Question" onPress={() => console.log("notes tapped!")}>
+                    <ActionButton.Item buttonColor='#9b59b6' title="Question" onPress={() => this.askQuestion()}>
                         <Icon name="message" style={styles.actionButtonIcon} />
                     </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#3498db' title="Photo" onPress={() => {}}>
+                    <ActionButton.Item buttonColor='#3498db' title="Photo" onPress={() => this.takePhoto()}>
                         <Icon name="insert-photo" style={styles.actionButtonIcon} />
                     </ActionButton.Item>
                 </ActionButton>
@@ -227,6 +260,18 @@ class Main extends Component {
         );
     }
 }
+
+/**
+ <NavigationBar title={viewTitle}
+ tintColor={"#e74c3c"}
+ statusBar={{
+                             hidden: false,
+                             style: "light-content"
+                         }}
+ rightButton={
+                          <Icon.Button name="face" size={24} backgroundColor="rgba(0,0,0,0)" style={styles.profileButton} onPress={this.showProfile} />
+                         }
+ />**/
 
 var styles = StyleSheet.create({
     container: {

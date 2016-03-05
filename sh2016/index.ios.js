@@ -7,75 +7,47 @@ import React, {
   AppRegistry,
   Component,
   TabBarIOS,
-  Navigator,
+  NavigatorIOS,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 
-
 // bits from NPM
 import NavigationBar from 'react-native-navbar';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-var RNGeocoder = require('react-native-geocoder');
 
 // load views
-var Answer = require('./views/answer.ios'),
-    Main = require('./views/main.ios'),
-    Ask = require('./views/ask.ios');
-
+var Main = require('./views/main.ios');
 
 class sh2016 extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      navigationBarHidden: false,
-      initialPosition: 'unknown',
-      lastPosition: 'unknown',
-      currentLocationName: '',
-      watchID: 0
+      navigationBarHidden: false
     };
   }
 
   render() {
     return(
-        <Navigator ref="nav"
-                      itemWrapperStyle={styles.navWrap}
-                      style={styles.nav}
-                      navigationBarHidden={this.state.navigationBarHidden}
-                      initialRoute={{
-                        title: this.state.currentLocationName,
-                        index: 0
-                      }}
-                      renderScene={(route, navigator) =>
-                        <Main
-                          name={route.name}
-                          onForward={() => {
-
-                            var nextIndex = route.index + 1;
-                            navigator.push({
-                              name: "Scene " + nextIndex,
-                              index: nextIndex
-                            })
-                          }}
-                          onBack={() =>  {
-                            if(route.index > 0) {
-                              navigator.pop();
-                            }
-                          }}
-                        />
-                      }
-                      />
+        <NavigatorIOS
+          style={styles.navWrap}
+          barTintColor="rgba(231,76,60,1)"
+          titleTextColor="#ffffff"
+          tintColor="#ffffff"
+          initialRoute={{
+            title: "Loki",
+            component: Main
+          }} />
     )
   }
 }
 
 var styles = StyleSheet.create({
   navWrap: {
-    flex: 1,
-    marginTop: 70
+    flex: 1
   },
   nav: {
     flex: 1
