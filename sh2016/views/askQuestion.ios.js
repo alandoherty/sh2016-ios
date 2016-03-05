@@ -11,6 +11,9 @@ import React, {
 
 var api = require('../api');
 
+// custom message bubbles
+var ImageButton = require('./Components/ImageBubble.ios');
+
 class AskQuestion extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +53,18 @@ class AskQuestion extends Component {
                             text: responseData.answer[i].text,
                             position: 'left'
                         });
+                    } else if(responseData.answer[i].type == "image") {
+                        // set the image
+                        self._GiftedMessenger.appendMessage({
+                            text: "isMainImage",
+                            image: {uri: responseData.answer[i].src},
+                            position: 'left'
+                        });
+                        // and add the caption
+                        self._GiftedMessenger.appendMessage({
+                            text: responseData.answer[i].caption,
+                            position: 'left'
+                        });
                     } else {
                         console.log("ignoring");
                     }
@@ -59,7 +74,7 @@ class AskQuestion extends Component {
                     text: "We couldn't quite find an accurate answer for this. We've farmed it out to our local experts to Make America Great Again. Hang tight!",
                     position: 'left',
                     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}
-                })
+                });
             }
 
         });
@@ -98,9 +113,27 @@ class AskQuestion extends Component {
     }
 }
 
-var styles = StyleSheet.create({
-   messenger: {
-       marginTop: 10
-   }
+let styles = StyleSheet.create({
+    messenger: {
+        marginTop: 20
+    },
+    bubble: {
+        borderRadius: 15,
+        paddingLeft: 14,
+        paddingRight: 14,
+        paddingBottom: 10,
+        paddingTop: 8,
+    },
+    text: {
+        color: '#000',
+    },
+    textLeft: {
+    },
+    textRight: {
+        color: '#fff',
+    },
+    bubbleError: {
+        backgroundColor: '#e01717'
+    },
 });
 module.exports = AskQuestion;

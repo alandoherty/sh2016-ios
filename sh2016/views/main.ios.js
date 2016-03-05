@@ -185,26 +185,49 @@ class Main extends Component {
     rowPressed(self, query) {
         console.log("CLICKED");
         console.log(query);
-        this.props.navigator.push({
-            title: "Detail",
-            component: QueryDetail,
-            passProps: {
-                latitude: this.state.lastPosition.coords.latitude,
-                longitude: this.state.lastPosition.coords.longitude
-            }
-        });
+        if(this.state.lastPosition.coords) {
+            this.props.navigator.push({
+                title: "Detail",
+                component: QueryDetail,
+                passProps: {
+                    latitude: this.state.lastPosition.coords.latitude,
+                    longitude: this.state.lastPosition.coords.longitude
+                }
+            });
+        } else {
+            this.props.navigator.push({
+                title: "Detail",
+                component: QueryDetail,
+                passProps: {
+                    latitude: 53.4705799627173,
+                    longitude: -2.239935952055714
+                }
+            });
+        }
+
     }
 
     askQuestion() {
         console.log("ASKING QUESTION");
-        this.props.navigator.push({
-            title: "Question",
-            component: AskQuestion,
-            passProps: {
-                latitude: this.state.lastPosition.coords.latitude,
-                longitude: this.state.lastPosition.coords.longitude
-            }
-        });
+        if(this.state.lastPosition.coords) {
+            this.props.navigator.push({
+                title: "Ask Loki",
+                component: AskQuestion,
+                passProps: {
+                    latitude: this.state.lastPosition.coords.latitude,
+                    longitude: this.state.lastPosition.coords.longitude
+                }
+            });
+        } else {
+            this.props.navigator.push({
+                title: "Ask Loki",
+                component: AskQuestion,
+                passProps: {
+                    latitude: 53.4705799627173,
+                    longitude: -2.239935952055714
+                }
+            });
+        }
     }
 
     takePhoto() {

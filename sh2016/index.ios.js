@@ -8,6 +8,7 @@ import React, {
   Component,
   TabBarIOS,
   NavigatorIOS,
+  StatusBarIOS,
   StyleSheet,
   Text,
   View
@@ -31,12 +32,14 @@ class sh2016 extends Component {
   }
 
   render() {
+    StatusBarIOS.setStyle('light-content', false);
     return(
         <NavigatorIOS
           style={styles.navWrap}
           barTintColor="rgba(231,76,60,1)"
           titleTextColor="#ffffff"
           tintColor="#ffffff"
+
           initialRoute={{
             title: "Loki",
             component: Main
