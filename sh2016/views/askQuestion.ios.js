@@ -1,13 +1,13 @@
+
 'use strict';
+
+var GiftedMessenger = require('react-native-gifted-messenger');
 import React, {
-    StyleSheet,
-    StatusBar,
-    TouchableHighlight,
-    TextInput,
-    View,
-    Text,
-    Component
+    Dimensions,
+    Component,
+    StyleSheet
 } from 'react-native';
+
 
 var api = require('../api');
 
@@ -18,73 +18,89 @@ class AskQuestion extends Component {
             text: ""
         };
 
-        this.sendMessage = this.sendMessage.bind(this);
+        this.handleSend = this.handleSend.bind(this);
     }
-    sendMessage() {
-        alert("sending this shit");
-        var message = this.state.text;
-        this.setState({
-            text: ""
-        });
+
+    getMessages() {
+        return [
+            {text: 'Hey there, human! I\'m here to help you with all your local needs. Enter a question to get started!', name: 'Loki', image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}, position: 'left'},
+        ];
+    }
+
+    handleSend(message = {}, rowID = null) {
+        console.log(message);
+
+        var self = this;
 
         var params = {
             type: "text",
             lat: this.props.latitude,
             lon: this.props.longitude,
-            q: message
-        }
+            q: message.text
+        };
 
         api.post("/query/create", params, function(err, responseData) {
-            alert("Response complete");
             console.log("another response");
             console.log(responseData);
+
+            if(responseData.answered) {
+                for(var i = 0; i < responseData.answer.length; i++) {
+                    if(responseData.answer[i].type == "text") {
+                        self._GiftedMessenger.appendMessage({
+                            text: responseData.answer[i].text,
+                            position: 'left'
+                        });
+                    } else {
+                        console.log("ignoring");
+                    }
+                };
+            } else {
+                self._GiftedMessenger.appendMessage({
+                    text: "We couldn't quite find an accurate answer for this. We've farmed it out to our local experts to Make America Great Again. Hang tight!",
+                    position: 'left',
+                    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}
+                })
+            }
+
         });
     }
+
+    handleReceive() {
+        this._GiftedMessenger.appendMessage({
+            text: 'Received message',
+            name: 'Friend',
+            image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},            position: 'left',
+            date: new Date()
+        });
+    }
+
     render() {
-        return(
-            <View style={styles.container}>
-                <View style={styles.messageArea}>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                    />
-                    <TouchableHighlight onPress={() => this.sendMessage(this)} style={styles.sendMessage}>
-                        <Text style={styles.sendMessageText}>Send</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
+        return (
+            <GiftedMessenger
+                ref={(c) => this._GiftedMessenger = c}
+
+                messages={this.getMessages()}
+                handleSend={this.handleSend}
+                maxHeight={Dimensions.get('window').height} // 64 for the navBar
+                style={styles.messenger}
+                styles={{
+                  bubbleLeft: {
+                    backgroundColor: '#e6e6eb',
+                    marginRight: 70,
+                  },
+                  bubbleRight: {
+                    backgroundColor: '#007aff',
+                    marginLeft: 70,
+                  },
+                }}
+            />
         );
     }
 }
 
 var styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F7F7F7',
-        paddingTop: 70
-    },
-    messageArea: {
-        flex: 1,
-        height: 64,
-        alignItems: 'flex-start',
-        justifyContent: "center",
-        alignSelf: 'flex-start',
-        backgroundColor: '#ecf0f1',
-        borderTopWidth: 1,
-        borderTopColor: '#95a5a6'
-    },
-    sendMessage: {
-    },
-    sendMessageText: {
-        color: "#123456",
-        fontSize: 16,
-        padding: 10,
-        width: 80
-    }
+   messenger: {
+       marginTop: 10
+   }
 });
-
 module.exports = AskQuestion;
