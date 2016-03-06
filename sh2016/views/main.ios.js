@@ -191,7 +191,8 @@ class Main extends Component {
                 component: QueryDetail,
                 passProps: {
                     latitude: this.state.lastPosition.coords.latitude,
-                    longitude: this.state.lastPosition.coords.longitude
+                    longitude: this.state.lastPosition.coords.longitude,
+                    query: query
                 }
             });
         } else {
@@ -200,7 +201,8 @@ class Main extends Component {
                 component: QueryDetail,
                 passProps: {
                     latitude: 53.4705799627173,
-                    longitude: -2.239935952055714
+                    longitude: -2.239935952055714,
+                    query: query
                 }
             });
         }
