@@ -7,13 +7,15 @@ import React, {
     AppRegistry,
     StyleSheet,
     TouchableHighlight,
+    NativeModules,
     StatusBar,
     ListView,
     View,
     Text,
     Image,
     Component,
-    TabBarIOS
+    TabBarIOS,
+    AsyncStorage
 } from 'react-native';
 
 
@@ -32,6 +34,9 @@ var Answer = require('../views/answer.ios'),
 
 // and api
 var api = require('../api');
+
+var ImagePickerManager = require('NativeModules').ImagePickerManager;
+var FileUpload = require('NativeModules').FileUpload;
 
 
 /* sample data
@@ -233,11 +238,180 @@ class Main extends Component {
     }
 
     takePhoto() {
-        console.log("TAKE ALL THE PHOTOS");
-        this.props.navigator.push({
-            title: "Photo",
-            component: TakePhoto
-        })
+        var self = this;
+        var options = {
+            title: 'Select Image', // specify null or empty string to remove the title
+            cancelButtonTitle: 'Cancel',
+            takePhotoButtonTitle: 'Take Photo...', // specify null or empty string to remove this button
+            chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
+            cameraType: 'back', // 'front' or 'back'
+            mediaType: 'photo', // 'photo' or 'video'
+            videoQuality: 'high', // 'low', 'medium', or 'high'
+            durationLimit: 10, // video recording max time in seconds
+            maxWidth: 100, // photos only
+            maxHeight: 100, // photos only
+            aspectX: 2, // aspectX:aspectY, the cropping image's ratio of width to height
+            aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
+            quality: 0.4, // photos only
+            angle: 0, // photos only
+            allowsEditing: false, // Built in functionality to resize/reposition the image
+            noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+            storageOptions: { // if this key is provided, the image will get saved in the documents/pictures directory (rather than a temporary directory)
+                skipBackup: true, // image will NOT be backed up to icloud
+                path: 'images' // will save image at /Documents/images rather than the root
+            }
+        };
+
+        ImagePickerManager.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePickerManager Error: ', response.error);
+            }
+            else {
+                // You can display the image using either data:
+                const prefixedSource = response.uri;
+                const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+
+                AsyncStorage.getItem("session").then((sessionValue) => {
+                    var uploadSettings = {
+                        uploadUrl: "http://sh2016.ngrok.io/query/create?type=picture&latitude=" + self.state.lastPosition.coords.latitude + " &longitude=" + self.state.lastPosition.coords.latitude + "&session=" + sessionValue,
+                        uri: response.uri,
+                        files: [
+                            {
+                                name: 'file',
+                                filename: source,
+                                filepath: source
+                            }
+                        ]
+                    };
+
+                    fetch("http://sh2016.ngrok.io/query/create?where=true&type=picture&lat=" + self.state.lastPosition.coords.latitude + " &lon=" + self.state.lastPosition.coords.latitude + "&session=" + sessionValue, {
+                        body: JSON.stringify({
+                            data: response.data,
+                            where: true
+                        }),
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then((response) => response.json())
+                    .catch((error) => {
+                        alert("ERROR " + error)
+                    })
+                    .then((responseData) => {
+                        console.log("NEW RESPONSE BELOW IMAGE");
+                        console.log(responseData);
+                        this.props.navigator.push({
+                            title: "Ask Loki",
+                            component: AskQuestion,
+                            passProps: {
+                                latitude: this.state.lastPosition.coords.latitude,
+                                longitude: this.state.lastPosition.coords.longitude,
+                                photo: {
+                                    imageURL: response.uri
+                                },
+                                response: responseData
+                            }
+                        });
+                    })
+                    .done();
+                });
+            }
+        });
+    }
+
+    identify() {
+        var self = this;
+        var options = {
+            title: 'Select Image', // specify null or empty string to remove the title
+            cancelButtonTitle: 'Cancel',
+            takePhotoButtonTitle: 'Take Photo...', // specify null or empty string to remove this button
+            chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
+            cameraType: 'back', // 'front' or 'back'
+            mediaType: 'photo', // 'photo' or 'video'
+            videoQuality: 'high', // 'low', 'medium', or 'high'
+            durationLimit: 10, // video recording max time in seconds
+            maxWidth: 100, // photos only
+            maxHeight: 100, // photos only
+            aspectX: 2, // aspectX:aspectY, the cropping image's ratio of width to height
+            aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
+            quality: 0.4, // photos only
+            angle: 0, // photos only
+            allowsEditing: false, // Built in functionality to resize/reposition the image
+            noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+            storageOptions: { // if this key is provided, the image will get saved in the documents/pictures directory (rather than a temporary directory)
+                skipBackup: true, // image will NOT be backed up to icloud
+                path: 'images' // will save image at /Documents/images rather than the root
+            }
+        };
+
+        ImagePickerManager.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePickerManager Error: ', response.error);
+            }
+            else {
+                // You can display the image using either data:
+                const prefixedSource = response.uri;
+                const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+
+                AsyncStorage.getItem("session").then((sessionValue) => {
+                    var uploadSettings = {
+                        uploadUrl: "http://sh2016.ngrok.io/query/create?type=picture&latitude=" + self.state.lastPosition.coords.latitude + " &longitude=" + self.state.lastPosition.coords.latitude + "&session=" + sessionValue,
+                        uri: response.uri,
+                        files: [
+                            {
+                                name: 'file',
+                                filename: source,
+                                filepath: source
+                            }
+                        ]
+                    };
+
+                    fetch("http://sh2016.ngrok.io/query/create?type=picture&lat=" + self.state.lastPosition.coords.latitude + " &lon=" + self.state.lastPosition.coords.latitude + "&session=" + sessionValue, {
+                        body: JSON.stringify({
+                            data: response.data
+                        }),
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                        .then((response) => response.json())
+                        .catch((error) => {
+                            alert("ERROR " + error)
+                        })
+                        .then((responseData) => {
+                            console.log("NEW RESPONSE BELOW IMAGE");
+                            console.log(responseData);
+                            this.props.navigator.push({
+                                title: "Ask Loki",
+                                component: AskQuestion,
+                                passProps: {
+                                    latitude: this.state.lastPosition.coords.latitude,
+                                    longitude: this.state.lastPosition.coords.longitude,
+                                    photo: {
+                                        imageURL: response.uri
+                                    },
+                                    response: responseData
+                                }
+                            });
+                        })
+                        .done();
+                });
+            }
+        });
     }
 
     renderQuery(query) {
@@ -250,9 +424,9 @@ class Main extends Component {
                         style={styles.thumbnail}
                     />
                     <View style={styles.rightContainer}>
-                        <Text style={styles.name}>{query.user.firstName.toUpperCase()} {query.user.lastName.toUpperCase()}, {query.time}</Text>
+                        <Text style={styles.name}>{query.user.firstName.toUpperCase()} {query.user.lastName.toUpperCase()} {query.time}</Text>
                         <Text style={styles.title}>{query.content}</Text>
-                        <Text style={styles.locationText}><Icon name="location-on" /><Text style={styles.locationDistance}>0.3mi</Text>, Manchester</Text>
+                        <Text style={styles.locationText}><Icon name="location-on" /><Text style={styles.locationDistance}>{query.distance}km</Text>, Manchester</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -277,8 +451,11 @@ class Main extends Component {
                     <ActionButton.Item buttonColor='#9b59b6' title="Question" onPress={() => this.askQuestion()}>
                         <Icon name="message" style={styles.actionButtonIcon} />
                     </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#3498db' title="Photo" onPress={() => this.takePhoto()}>
+                    <ActionButton.Item buttonColor='#3498db' title="Identify" onPress={() => this.identify()}>
                         <Icon name="insert-photo" style={styles.actionButtonIcon} />
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#2ecc71' title="Where to Buy" onPress={() => this.takePhoto()}>
+                        <Icon name="shopping-basket" style={styles.actionButtonIcon} />
                     </ActionButton.Item>
                 </ActionButton>
             </View>

@@ -21,6 +21,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		7D7D56211C8BB40F00CDBD68 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7D561F1C8BB3FC00CDBD68 /* libRNImagePicker.a */; };
+		7D7D56271C8C3BF000CDBD68 /* FileUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7D56261C8C3BF000CDBD68 /* FileUpload.m */; };
 		7DBACB031C8AD56100EBA325 /* libRNGeocoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DBACB021C8AD54600EBA325 /* libRNGeocoder.a */; };
 		7DBACB051C8B035A00EBA325 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DBACB041C8B035A00EBA325 /* MaterialIcons.ttf */; };
 		7DBACB0C1C8B05F700EBA325 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DBACB0B1C8B05ED00EBA325 /* libRNVectorIcons.a */; };
@@ -98,6 +100,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTLinking;
 		};
+		7D7D561E1C8BB3FC00CDBD68 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D7D560F1C8BB3FB00CDBD68 /* RNImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
+			remoteInfo = RNImagePicker;
+		};
 		7DBACB011C8AD54600EBA325 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7DBACAFD1C8AD54600EBA325 /* RNGeocoder.xcodeproj */;
@@ -142,6 +151,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = sh2016/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		7D7D560F1C8BB3FB00CDBD68 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
+		7D7D56261C8C3BF000CDBD68 /* FileUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileUpload.m; path = "../node_modules/react-native-file-upload/FileUpload.m"; sourceTree = "<group>"; };
 		7DBACAFD1C8AD54600EBA325 /* RNGeocoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGeocoder.xcodeproj; path = "../node_modules/react-native-geocoder/RNGeocoder.xcodeproj"; sourceTree = "<group>"; };
 		7DBACB041C8B035A00EBA325 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		7DBACB061C8B05ED00EBA325 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -160,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D7D56211C8BB40F00CDBD68 /* libRNImagePicker.a in Frameworks */,
 				7DBACB0C1C8B05F700EBA325 /* libRNVectorIcons.a in Frameworks */,
 				7DBACB031C8AD56100EBA325 /* libRNGeocoder.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -281,6 +293,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7D7D56101C8BB3FB00CDBD68 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7D7D561F1C8BB3FC00CDBD68 /* libRNImagePicker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7DBACAFE1C8AD54600EBA325 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,6 +347,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7D7D56261C8C3BF000CDBD68 /* FileUpload.m */,
+				7D7D560F1C8BB3FB00CDBD68 /* RNImagePicker.xcodeproj */,
 				7DBACB041C8B035A00EBA325 /* MaterialIcons.ttf */,
 				13B07FAE1A68108700A75B9A /* sh2016 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -457,6 +479,10 @@
 					ProjectRef = 7DBACAFD1C8AD54600EBA325 /* RNGeocoder.xcodeproj */;
 				},
 				{
+					ProductGroup = 7D7D56101C8BB3FB00CDBD68 /* Products */;
+					ProjectRef = 7D7D560F1C8BB3FB00CDBD68 /* RNImagePicker.xcodeproj */;
+				},
+				{
 					ProductGroup = 7DBACB071C8B05ED00EBA325 /* Products */;
 					ProjectRef = 7DBACB061C8B05ED00EBA325 /* RNVectorIcons.xcodeproj */;
 				},
@@ -533,6 +559,13 @@
 			remoteRef = 78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		7D7D561F1C8BB3FC00CDBD68 /* libRNImagePicker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImagePicker.a;
+			remoteRef = 7D7D561E1C8BB3FC00CDBD68 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		7DBACB021C8AD54600EBA325 /* libRNGeocoder.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -606,6 +639,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D7D56271C8C3BF000CDBD68 /* FileUpload.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -682,6 +716,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = sh2016/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.karambyte.loki;
@@ -699,6 +734,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = sh2016/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.karambyte.loki;
