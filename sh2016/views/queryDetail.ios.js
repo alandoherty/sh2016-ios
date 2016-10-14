@@ -43,7 +43,7 @@ class QueryDetail extends Component {
             tintColor: "#fff",
         };
 
-        var avatarURL = "http://sh2016.ngrok.io/image?name=" + this.props.query.user.avatar;
+        var avatarURL = "http://4d499925.ngrok.com/image?name=" + this.props.query.user.avatar;
         return(
             <View style={styles.appContainer}>
                 <View style={styles.profileView}>

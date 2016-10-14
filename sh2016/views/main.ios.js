@@ -415,7 +415,7 @@ class Main extends Component {
     }
 
     renderQuery(query) {
-        var avatarURL = "http://sh2016.ngrok.io/image?name=" + query.user.avatar;
+        var avatarURL = "http://4d499925.ngrok.com/image?name=" + query.user.avatar;
         return(
             <TouchableHighlight onPress={() => this.rowPressed(this, query)}>
                 <View style={styles.container}>

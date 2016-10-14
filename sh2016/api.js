@@ -1,4 +1,4 @@
-var BASE_URL = "http://sh2016.ngrok.io";
+var BASE_URL = "http://4d499925.ngrok.com";
 
 import React, {
     AsyncStorage
